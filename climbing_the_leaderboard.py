@@ -27,41 +27,39 @@ def climbingLeaderboard(ranked, player):
     board.sort(reverse=True)
     ret = []    
     loop = 0
+    L = 0
+    R = len(board)
+
     for pts in player:
-        loop += 1
-        print(loop)
         if (pts > board[0]):
             ret.append(1)
-            break
+            continue
         if (pts < board[-1]):
-            ret.append(R)
-        found = False
-        L = 0
-        R = len(board)
-
-        while not found:
-            pos = (R + L) // 2            
-            if board[pos] > pts and board[pos+1] < pts:
-                found = True
-                ret.append(pos)
-            elif board[pos] > pts and board[pos+1] > pts:
-                L = pos
-            elif board[pos] < pts and board[pos+1] < pts:
-                R = pos
-            # print("pos={}  pts={}    board[pos]={} board[pos+1]={} L={} R={}".format(pos, pts, board[pos], board[pos+1], L, R))
-        
+            ret.append(R+1)
+            continue
+        try:
+            ret.append(board.index(pts)+1)
+        except ValueError:
+            found = False
+            while not found:            
+                pos = (R + L) // 2            
+                if board[pos] >= pts and board[pos+1] <= pts:
+                    found = True
+                    ret.append(pos+2)
+                elif board[pos] > pts and board[pos+1] > pts:
+                    L = pos
+                elif board[pos] < pts and board[pos+1] < pts:
+                    R = pos        
     return ret
 
 if __name__ == '__main__':
+    # ranked_count = int(input().strip())
+    # player_count = int(input().strip())
 
-    ranked_count = int(input().strip())
+    r_input = "100 100 50 40 40 20 10"
+    p_input = "5 25 50 120"
 
-    ranked = list(map(int, input().rstrip().split()))
-
-    player_count = int(input().strip())
-
-    player = list(map(int, input().rstrip().split()))
-
+    ranked = list(map(int, r_input.rstrip().split()))
+    player = list(map(int, p_input.rstrip().split()))
     result = climbingLeaderboard(ranked, player)
-
     print('\n'.join(map(str, result)))
