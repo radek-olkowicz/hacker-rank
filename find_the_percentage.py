@@ -14,4 +14,3 @@ if __name__ == '__main__':
     query_name = input()
     
     find_per(student_marks, query_name)
-    
